@@ -5,6 +5,7 @@ var moment = require('moment')
 const app = express()
 const port = 3000
 const fsPromises = require('fs/promises');
+const pug = require("pug");
 
 function getNow(){
     var now = moment().format('YYYY-MM-DD HH:MM:ss.SSSS');
@@ -14,7 +15,7 @@ function getNow(){
 async function writeLog(message, level) {
     try{
         const nowe = new Date();
-        await fsPromises.appendFile('./log.txt', `${level}: ${nowe.toLocaleString()} - ${message}\n`, 'utf-8');
+        await fsPromises.appendFile('views/log.', `${level}: ${nowe.toLocaleString()} - ${message}\n`, 'utf-8');
     }
     catch(err){
         console.log('Dosya yazdırılırken bir hata oluştu', err)
@@ -30,13 +31,8 @@ var con = mysql.createConnection({
     password: ""
   });
 
-
 app.get('/', (req, res) => {
-    res.send('You\'re not allowed here')
-})
-
-app.head('/', (req, res) => {
-    res.render(log); // log.jade dosyasını yükler 
+    res.send(pug.renderFile("log.pug")); // log.jade dosyasını yükler 
 })
 
 app.get('/login/:page/:token/:ip/', (req, res) => {
