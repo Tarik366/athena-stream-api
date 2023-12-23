@@ -20,7 +20,7 @@ async function writeLog(message, level) {
         console.log('Dosya yazdırılırken bir hata oluştu', err)
     }
 }
-writeLog('Bu bir günlük mesajıdır.', 'info');
+writeLog('Sunucu başlatıldı.', 'info');
 
 var con = mysql.createConnection({
     host: "localhost",
@@ -33,6 +33,10 @@ var con = mysql.createConnection({
 
 app.get('/', (req, res) => {
     res.send('You\'re not allowed here')
+})
+
+app.head('/', (req, res) => {
+    res.render(log); // log.jade dosyasını yükler 
 })
 
 app.get('/login/:page/:token/:ip/', (req, res) => {
