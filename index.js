@@ -1,11 +1,10 @@
 require('dotenv').config()
-console.log(process.env)
 const express = require('express')
 var mysql = require('mysql')
 var bodyParser = require('body-parser')
 var moment = require('moment')
 const app = express()
-const port = 30000
+const port = process.env.port;
 const fsPromises = require('fs/promises');
 const pug = require("pug");
 
@@ -26,11 +25,11 @@ async function writeLog(message, level) {
 writeLog('Sunucu başlatıldı.', 'info');
 
 var con = mysql.createConnection({
-    host: "localhost",
-    database: 'athenama_athena_admin_db',
-    port: 3306,
-    user: "root",
-    password: ""
+    host: process.env.host,
+    database: process.env.db,
+    port: process.env.dbport,
+    user: process.env.user,
+    password: process.env.ps
   });
 
 app.get('/api', (req, res) => {
