@@ -1,9 +1,11 @@
+require('dotenv').config()
+console.log(process.env)
 const express = require('express')
 var mysql = require('mysql')
 var bodyParser = require('body-parser')
 var moment = require('moment')
 const app = express()
-const port = 3000
+const port = 30000
 const fsPromises = require('fs/promises');
 const pug = require("pug");
 
@@ -31,18 +33,18 @@ var con = mysql.createConnection({
     password: ""
   });
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
     res.send(pug.renderFile("log.pug")); // log.jade dosyasını yükler 
 })
 
-app.get('/login/:page/:token/:ip/', (req, res) => {
+app.get('/api/login/:page/:token/:ip/', (req, res) => {
     con.query(`SELECT * FROM logins WHERE token = '${req.params.token}';`, function (err, result, fields) {
         res.send(JSON.stringify(result))
     });
     writeLog(`${req.params.token} ${req.params.page} sayfasına geçti`, 'Sayfa değişimi')
 });
 
-app.post('/login/:name/:token/:ip/', (req, res) => {
+app.post('/api/login/:name/:token/:ip/', (req, res) => {
     var now = getNow();
     // INSERT INTO `logins` (`name`, `token`, `time`, `ip_adress`) VALUES ('tarik', 'aaaaaaaaaaa', '2023-12-21 23:16:41.000000', '46.196.145.149');
     con.query(`INSERT INTO \`logins\` (\`name\`, \`token\`, \`time\`, \`ip_adress\`) VALUES ('${req.params.name}', '${req.params.token}', '${now}', '${req.params.ip}');`, function (err, result, fields) {
@@ -51,7 +53,7 @@ app.post('/login/:name/:token/:ip/', (req, res) => {
     writeLog(`${req.params.name}, ${req.params.ip} adresinden ${req.params.token} ile giriş yaptı`, 'Giriş');
 })
 
-app.delete('/login', (req, res) => {
+app.delete('/api/login', (req, res) => {
     res.send(JSON.stringify({ x: 5, y: 6 }))
 })
 
